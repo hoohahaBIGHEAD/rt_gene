@@ -6,6 +6,7 @@ import argparse
 import os
 import time
 from os import listdir
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -34,14 +35,14 @@ class BlinkEstimatorFolderPair(object):
         left_images, right_images = [], []
 
         for left_image_name in sorted(listdir(left_folder_path)):
-            left_image_path = left_folder_path + '/' + left_image_name
+            left_image_path = Path(left_folder_path).joinpath(left_image_name)
             left_image_paths.append(left_image_path)
-            left_images.append(cv2.imread(left_image_path, cv2.IMREAD_COLOR))
+            left_images.append(cv2.imdecode(np.fromfile(left_image_path, dtype=np.uint8), cv2.IMREAD_COLOR))
 
         for right_image_name in sorted(listdir(right_folder_path)):
-            right_image_path = right_folder_path + '/' + right_image_name
+            right_image_path = Path(right_folder_path).joinpath(right_image_name)
             right_image_paths.append(right_image_path)
-            right_images.append(cv2.imread(right_image_path, cv2.IMREAD_COLOR))
+            right_images.append(cv2.imdecode(np.fromfile(right_image_path, dtype=np.uint8), cv2.IMREAD_COLOR))
 
         l_images_input, r_images_input = [], []
         for l_img, r_img in zip(left_images, right_images):
@@ -69,12 +70,12 @@ class BlinkEstimatorFolderPair(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Estimate blink from image or folder pair.')
     parser.add_argument('--left', type=str, help='Path to a left eye image or a directory containing left eye images',
-                        default=os.path.join(script_path, './samples_blink/left/'))
+                        default=Path(script_path).joinpath('./samples_blink/left/'))
     parser.add_argument('--right', type=str,
                         help='Path to a right eye image or a directory containing images right eye images',
-                        default=os.path.join(script_path, './samples_blink/right/'))
+                        default=Path(script_path).joinpath('./samples_blink/right/'))
     parser.add_argument('--model', nargs='+', type=str,
-                        default=[os.path.abspath(os.path.join(script_path, '../rt_gene/model_nets/blink_model_pytorch_vgg16_allsubjects1.model'))],
+                        default=[os.path.abspath(os.path.join(script_path, '../model_nets/blink_model_pytorch_vgg16_allsubjects1.model'))],
                         help='List of blink estimators')
     parser.add_argument('--model_type', type=str, default="vgg16")
     parser.add_argument('--threshold', type=float, default=0.5,
