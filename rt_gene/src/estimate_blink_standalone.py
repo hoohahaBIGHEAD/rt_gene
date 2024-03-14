@@ -70,10 +70,12 @@ class BlinkEstimatorFolderPair(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Estimate blink from image or folder pair.')
     parser.add_argument('--left', type=str, help='Path to a left eye image or a directory containing left eye images',
-                        default=Path(script_path).joinpath('./samples_blink/left/'))
+                        # default=Path(script_path).joinpath('./samples_blink/left/'
+                        default=Path(rf"C:\Users\hahah\corgiOneDrive\OneDrive\대학원\2024-1학기\과제\틱\눈 깜빡임\dataset\RT-BENE\s001_noglasses\natural\left"))
     parser.add_argument('--right', type=str,
                         help='Path to a right eye image or a directory containing images right eye images',
-                        default=Path(script_path).joinpath('./samples_blink/right/'))
+                        # default=Path(script_path).joinpath('./samples_blink/right/'))
+                        default=Path(rf"C:\Users\hahah\corgiOneDrive\OneDrive\대학원\2024-1학기\과제\틱\눈 깜빡임\dataset\RT-BENE\s001_noglasses\natural\right"))
     parser.add_argument('--model', nargs='+', type=str,
                         default=[os.path.abspath(os.path.join(script_path, '../model_nets/blink_model_pytorch_vgg16_allsubjects1.model'))],
                         help='List of blink estimators')
